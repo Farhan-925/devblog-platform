@@ -30,7 +30,7 @@ export default async function DashboardLayout({ children }) {
                         DevBlog<span className="text-gray-100 ml-1">.</span>
                       </span>
           </Link>
-          {profile?.role === 'admin' && (
+          {profile && (
             <Link href="/admin" className="text-[10px] bg-purple-600/30 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full font-bold">
               User Panel
             </Link>
