@@ -26,12 +26,19 @@ export default async function AdminLayout({ children }) {
       {/* Left Navigation Sidebar */}
       <aside className="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-b md:border-b-0 md:border-r border-slate-800">
         <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between">
-          <Link href="/admin" className="text-lg sm:text-xl font-bold text-white tracking-wide flex items-center gap-2">
-            <span className="p-1.5 bg-blue-600 rounded-lg text-xs">⚡</span> Admin Core
+          <Link href="/" className="group flex items-center space-x-2 focus:outline-none">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                        D
+                      </div>
+                      <span className="text-md font-extrabold tracking-tight text-gray-100 group-hover:text-blue-600 transition-colors">
+                        DevBlog<span className="text-gray-100 ml-1">.</span>
+                      </span>
           </Link>
-          <span className="md:hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-1 rounded-md font-mono">
-            Admin
-          </span>
+          {profile?.role === 'admin' && (
+            <Link href="/admin" className="text-[10px] bg-purple-600/30 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full font-bold">
+              Admin Panel
+            </Link>
+          )}
         </div>
 
         {/* Scrollable Navigation Links */}
