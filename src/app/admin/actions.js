@@ -1,13 +1,9 @@
-// src/app/admin/actions.js
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications'
 import { revalidatePath } from 'next/cache'
 
-/**
- * 1. Update Blog Status & Notify Blog Author
- */
 export async function updateaBlogStatus(blogId, newStatus) {
   const supabase = await createClient()
 

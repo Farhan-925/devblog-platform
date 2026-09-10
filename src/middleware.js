@@ -30,20 +30,30 @@ export async function middleware(request) {
     }
   )
 
+  // Refreshes the session token on every request
   const { data: { user } } = await supabase.auth.getUser()
   const path = request.nextUrl.pathname
 
-  // 1. Protect Dashboard: Redirect to login if user is not authenticated
-  if (path.startsWith('/dashboard') && !user) {
+  // 1. Protect Dashboard & Admin: Redirect to login if unauthenticated
+  if ((path.startsWith('/dashboard') || path.startsWith('/admin')) && !user) {
     return NextResponse.redirect(new URL('/login?error=Please log in first', request.url))
   }
 
-  // 2. Protect Admin Panel: Check both auth status and 'admin' role
-  if (path.startsWith('/admin')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/login?error=Please log in first', request.url))
+  // 2. Enforce MFA Level (AAL Check) for authenticated users on protected routes
+  if (user && (path.startsWith('/dashboard') || path.startsWith('/admin'))) {
+    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    
+    if (aalData) {
+      const { currentLevel, nextLevel } = aalData
+      // If user enabled MFA (nextLevel === 'aal2') but hasn't entered code (currentLevel === 'aal1')
+      if (nextLevel === 'aal2' && currentLevel === 'aal1') {
+        return NextResponse.redirect(new URL('/mfa-verify', request.url))
+      }
     }
+  }
 
+  // 3. Protect Admin Panel: Check for 'admin' role in profiles table
+  if (path.startsWith('/admin') && user) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -59,5 +69,14 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for:
+     * - auth/callback (PKCE token exchange handler)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt
+     */
+    '/((?!auth/callback|_next/static|_next/image|favicon.ico).*)',
+  ],
 }

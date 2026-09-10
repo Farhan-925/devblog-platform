@@ -1,4 +1,3 @@
-// src/app/admin/comments/page.jsx
 import { createClient } from '@/lib/supabase/server'
 import { updateCommentStatus } from '@/app/admin/actions' // Correct import path
 

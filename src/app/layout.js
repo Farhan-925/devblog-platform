@@ -1,4 +1,3 @@
-// src/app/layout.jsx
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
@@ -18,7 +17,7 @@ export const metadata = {
   title: "DevBlog.",
   description: "A blog platform sharing web development tips, tech tutorials, and modern app architecture.",
   icons: {
-    icon: "/icon.png", // Ensure your logo file is inside the public/ directory (e.g. public/favicon.ico or public/icon.png)
+    icon: "/icon.png", 
   },
 };
 
@@ -27,10 +26,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-gray-50 min-h-screen flex flex-col antialiased text-gray-900" suppressHydrationWarning>
         
-        {/* Header Navigation */}
         <Navbar />
 
-        {/* Dynamic Page Content */}
         <main className="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
           {children}
         </main>

@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { signup } from '../actions'
 import RecaptchaV3Field from '../RecaptchaV3Field'
+import PasswordField from './PasswordFields'
 
 export default async function RegisterPage({ searchParams }) {
   const { error, message } = await searchParams
@@ -48,17 +49,7 @@ export default async function RegisterPage({ searchParams }) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={6}
-            placeholder="••••••••"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <PasswordField />
 
         {/* reCAPTCHA Field */}
         <RecaptchaV3Field actionName="signup"/>

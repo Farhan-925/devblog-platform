@@ -1,4 +1,3 @@
-// src/app/(auth)/RecaptchaProvider.jsx
 'use client'
 
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'

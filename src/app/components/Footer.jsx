@@ -10,12 +10,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
             <span className="text-white font-bold text-lg tracking-wide flex items-center gap-2">
-              <span className="p-1 bg-blue-600 rounded-lg text-xs">⚡</span> DevBlog
+              <span className="h-7 w-7 bg-blue-600 rounded-lg text-md text-center">D</span> DevBlog
             </span>
             <p className="text-xs leading-relaxed text-slate-400">
               A modern blog for developers, by a developer. Build. Learn. Grow.
             </p>
-          </div>
+          </div> 
 
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Quick Links</h4>

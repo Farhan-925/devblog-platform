@@ -1,4 +1,3 @@
-// src/app/admin/blogs/page.jsx
 import { createClient } from '@/lib/supabase/server'
 import { updateaBlogStatus } from '../actions'
 

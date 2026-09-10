@@ -1,4 +1,3 @@
-// src/app/admin/users/page.jsx
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
