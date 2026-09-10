@@ -120,6 +120,10 @@ export async function createBlog(formData) {
   revalidatePath('/dashboard')
   revalidatePath('/admin/blogs')
 
-  const msg = postStatus === 'draft' ? 'Draft saved successfully!' : 'Blog submitted successfully! Awaiting approval.'
-  redirect(`/dashboard?message=${encodeURIComponent(msg)}`)
+  // 6. Conditional Redirect
+  if (postStatus === 'pending') {
+    redirect(`/dashboard/blogs/submitted?title=${encodeURIComponent(title)}`)
+  } else {
+    redirect('/dashboard?message=' + encodeURIComponent('Draft saved successfully!'))
+  }
 }

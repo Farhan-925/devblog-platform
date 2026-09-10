@@ -1,6 +1,7 @@
 // src/app/(auth)/register/page.jsx
 import Link from 'next/link'
 import { signup } from '../actions'
+import RecaptchaV3Field from '../RecaptchaV3Field'
 
 export default async function RegisterPage({ searchParams }) {
   const { error, message } = await searchParams
@@ -13,13 +14,13 @@ export default async function RegisterPage({ searchParams }) {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
-          {error}
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg font-medium">
+          ⚠️ {error}
         </div>
       )}
 
       {message && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-xs rounded-lg">
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-xs rounded-lg font-medium">
           {message}
         </div>
       )}
@@ -58,6 +59,9 @@ export default async function RegisterPage({ searchParams }) {
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        {/* reCAPTCHA Field */}
+        <RecaptchaV3Field actionName="signup"/>
 
         <button
           type="submit"
