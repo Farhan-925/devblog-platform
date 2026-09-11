@@ -197,3 +197,71 @@ export async function updatePassword(formData) {
 
   redirect('/login?message=' + encodeURIComponent('Password reset successful. Please sign in with your new password.'))
 }
+
+// -------------------------------------------------------------
+// USER PROFILE & IN-APP SECURITY SETTINGS ACTIONS
+// -------------------------------------------------------------
+
+export async function updateProfile(formData) {
+  const fullName = formData.get('fullName')
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  // 1. Update full_name in Supabase Auth user metadata
+  await supabase.auth.updateUser({
+    data: { full_name: fullName }
+  })
+
+  // 2. Update profiles table row
+  const { error } = await supabase
+    .from('profiles')
+    .update({ full_name: fullName })
+    .eq('id', user.id)
+
+  if (error) {
+    redirect('/dashboard/settings?error=' + encodeURIComponent(error.message))
+  }
+
+  redirect('/dashboard/settings?message=' + encodeURIComponent('Profile details updated successfully.'))
+}
+
+export async function changePasswordLoggedIn(formData) {
+  const currentPassword = formData.get('currentPassword')
+  const newPassword = formData.get('newPassword')
+  const confirmPassword = formData.get('confirmPassword')
+
+  if (newPassword !== confirmPassword) {
+    redirect('/dashboard/settings?error=' + encodeURIComponent('New passwords do not match.'))
+  }
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/
+  if (!passwordRegex.test(newPassword)) {
+    redirect('/dashboard/settings?error=' + encodeURIComponent('Password must be 8–32 characters and include uppercase, lowercase, number, and special character.'))
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  // 1. Re-authenticate current password for security verification
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+  })
+
+  if (signInError) {
+    redirect('/dashboard/settings?error=' + encodeURIComponent('Current password is incorrect.'))
+  }
+
+  // 2. Update password and invalidate other device sessions
+  const { error: updateError } = await supabase.auth.updateUser({ password: newPassword })
+  if (updateError) {
+    redirect('/dashboard/settings?error=' + encodeURIComponent(updateError.message))
+  }
+
+  await supabase.auth.signOut({ scope: 'others' })
+
+  redirect('/dashboard/settings?message=' + encodeURIComponent('Password updated! Other active device sessions invalidated.'))
+}

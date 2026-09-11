@@ -64,6 +64,12 @@ export default async function DashboardLayout({ children }) {
             ✅ <span>Published</span>
           </Link>
           <Link
+            href="/dashboard/settings"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors whitespace-nowrap"
+          >
+            ⚙️ <span>Settings</span>
+          </Link>
+          <Link
             href="/dashboard/blogs/new"
             className="flex items-center gap-2 px-3 py-2 rounded-lg text-blue-400 hover:bg-blue-600/20 transition-colors md:mt-4 font-bold whitespace-nowrap"
           >
