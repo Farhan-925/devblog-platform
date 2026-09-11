@@ -16,8 +16,7 @@ export async function GET(request) {
     }
   }
 
-  // Redirect to login if token exchange fails or is expired
   return NextResponse.redirect(
-    `${origin}/login?error=${encodeURIComponent('Password reset link is invalid or has expired. Please request a new one.')}`
+    `${origin}/login?error=${encodeURIComponent('Password reset link is invalid or expired. Please try again.')}`
   )
 }
